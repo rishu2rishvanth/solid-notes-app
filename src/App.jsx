@@ -1,18 +1,25 @@
 import { createSignal, onMount } from 'solid-js';
 import NoteInput from './components/NoteInput';
 import NoteList from './components/NoteList';
+import SearchBar from './components/SearchBar';
 import './styles/App.css';
 
 function App() {
   const [notes, setNotes] = createSignal([]);
-
-
+  // Search notes from localStorage
+  const [searchText, setSearchText] = createSignal('');
   const [darkMode, setDarkMode] = createSignal(false);
   
   onMount(() => {
     const stored = localStorage.getItem('dark-mode');
     setDarkMode(stored === 'true');
     updateBodyClass(stored === 'true');
+
+    // Load notes from localStorage when app starts
+    const saved = localStorage.getItem('my-notes');
+    if (saved) {
+      setNotes(JSON.parse(saved)); // Set notes state from localStorage
+    }
   });
   
   const toggleDarkMode = () => {
@@ -25,14 +32,6 @@ function App() {
   const updateBodyClass = (isDark) => {
     document.body.classList.toggle('dark', isDark);
   };
-
-  // Load notes from localStorage when app starts
-  onMount(() => {
-    const saved = localStorage.getItem('my-notes');
-    if (saved) {
-      setNotes(JSON.parse(saved)); // Set notes state from localStorage
-    }
-  });
 
   // Save notes to localStorage
   const saveNotes = (newNotes) => {
@@ -125,7 +124,15 @@ function App() {
       <NoteInput addNote={addNote} />
 
       {/* NoteList Component */}
-      <NoteList notes={notes()} saveNotes={saveNotes} />
+      <NoteList notes={notes().filter(note =>
+          note.text.toLowerCase().includes(searchText().toLowerCase())
+        )}
+        saveNotes={saveNotes}
+      />
+      
+      {/* SearchBar Component */}
+      <SearchBar onSearch={setSearchText} />
+
     </div>
   );
 }
