@@ -1,5 +1,16 @@
 .note-list {
-  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  /* optionally: */
+  align-items: flex-start;
+}
+
+.note-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%; /* or set a max-width */
+  max-width: 700px; /* adjust as needed */
 }
 
 .note-item {
