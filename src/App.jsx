@@ -22,9 +22,10 @@ function App() {
     if (noteText().trim() !== '') {
       const newNote = {
         text: noteText(),
-        time: new Date().toLocaleString()
+        time: new Date().toLocaleString(),
+        completed: false,  // New field to track if the note is marked as completed
       };
-      const updatedNotes = [...notes(), newNote];
+      const updatedNotes = [newNote, ...notes()];  // Add new note to the top of the list
       saveNotes(updatedNotes);
       setNoteText('');
     }
@@ -32,6 +33,17 @@ function App() {
 
   const deleteNote = (indexToDelete) => {
     const updatedNotes = notes().filter((_, index) => index !== indexToDelete);
+    saveNotes(updatedNotes);
+  };
+
+  // Toggle the completion (strike-through) of a note
+  const toggleCompletion = (indexToToggle) => {
+    const updatedNotes = notes().map((note, index) => {
+      if (index === indexToToggle) {
+        return { ...note, completed: !note.completed };
+      }
+      return note;
+    });
     saveNotes(updatedNotes);
   };
 
@@ -54,7 +66,7 @@ function App() {
       </div>
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {notes().reverse().map((note, index) => (
+        {notes().map((note, index) => (
           <li
             key={index}
             style={{
@@ -66,6 +78,8 @@ function App() {
               display: 'block',
               justifyContent: 'space-between',
               alignItems: 'center',
+              textDecoration: note.completed ? 'line-through' : 'none', // Apply strike-through when completed
+              color: note.completed ? '#888' : '#000', // Optional: Change color for completed notes
             }}
           >
             <div style={{
@@ -77,7 +91,7 @@ function App() {
             ><strong>{notes().length - index}.</strong> {note.text}</div>
             <small style={{ color: '#555' }}>🕒 {note.time}</small>
             <button
-              onClick={() => deleteNote(index)}
+              onClick={() => deleteNote(index)}  // Delete note on click
               style={{
                 background: 'red',
                 margin: '3px',
@@ -89,6 +103,20 @@ function App() {
               }}
             >
               🗑️ Delete
+            </button>
+            <button
+              onClick={() => toggleCompletion(index)}  // Toggle completion on click
+              style={{
+                background: note.completed ? 'gray' : 'green',
+                margin: '3px',
+                color: '#fff',
+                border: 'none',
+                padding: '0.3rem 0.5rem',
+                borderRadius: '3px',
+                cursor: 'pointer',
+              }}
+            >
+              {note.completed ? '✔️ Completed' : '❌ Mark as Done'}
             </button>
           </li>
         ))}
