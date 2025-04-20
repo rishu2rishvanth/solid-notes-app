@@ -54,7 +54,7 @@ function App() {
       </div>
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {notes().map((note, index) => (
+        {notes().reverse().map((note, index) => (
           <li
             key={index}
             style={{
@@ -74,7 +74,7 @@ function App() {
               overflowWrap: 'anywhere',
               whiteSpace: 'pre-wrap',
             }}
-            ><strong>{index + 1}.</strong> {note.text}</div>
+            ><strong>{notes().length - index}.</strong> {note.text}</div>
             <small style={{ color: '#555' }}>🕒 {note.time}</small>
             <button
               onClick={() => deleteNote(index)}
