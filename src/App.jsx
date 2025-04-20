@@ -20,7 +20,11 @@ function App() {
 
   const addNote = () => {
     if (noteText().trim() !== '') {
-      const updatedNotes = [...notes(), noteText()];
+      const newNote = {
+        text: noteText(),
+        time: new Date().toLocaleString()
+      };
+      const updatedNotes = [...notes(), newNote];
       saveNotes(updatedNotes);
       setNoteText('');
     }
@@ -59,20 +63,21 @@ function App() {
               padding: '0.5rem',
               borderRadius: '4px',
               boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-              display: 'flex',
+              display: 'block',
               justifyContent: 'space-between',
               alignItems: 'center',
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word',
+              whiteSpace: 'pre-wrap' // this helps with line breaks
             }}
           >
-            <span
-            style={{
-              padding: '3px' 
-            }}
-            ><strong>{index + 1}.</strong> {note}</span>
+            <div><strong>{index + 1}.</strong> {note.text}</div>
+            <small style={{ color: '#555' }}>🕒 {note.time}</small>
             <button
               onClick={() => deleteNote(index)}
               style={{
                 background: 'red',
+                margin: '3px',
                 color: '#fff',
                 border: 'none',
                 padding: '0.3rem 0.5rem',
