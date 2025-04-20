@@ -88,7 +88,7 @@ function App() {
           onInput={(e) => setNoteText(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && addNote()}
           placeholder="Write a note..."
-          style={{ padding: '0.5rem', width: '300px' }}
+          style={{ padding: '0.5rem', width: '250px' }}
         />
         <button onClick={addNote} style={{ padding: '0.5rem', margin: '3px' }}>
           Add Note
@@ -115,8 +115,9 @@ function App() {
             <div style={{
               marginBottom: '0.5rem',
               wordWrap: 'break-word',
-              overflowWrap: 'anywhere',
+              overflowWrap: 'break-word',
               whiteSpace: 'pre-wrap',
+              hyphens: 'auto',
             }}
             ><strong>{notes().length - index}.</strong> {note.text}</div>
             <small style={{ color: '#555' }}>🕒 {note.time}</small>
