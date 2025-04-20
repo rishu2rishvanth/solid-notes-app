@@ -1,18 +1,34 @@
-import { createSignal } from 'solid-js';
+import { createSignal, onMount } from 'solid-js';
 
 function App() {
   const [notes, setNotes] = createSignal([]);
   const [noteText, setNoteText] = createSignal('');
 
+  // Load notes from localStorage when app starts
+  onMount(() => {
+    const saved = localStorage.getItem('my-notes');
+    if (saved) {
+      setNotes(JSON.parse(saved));
+    }
+  });
+
+  // Save notes to localStorage
+  const saveNotes = (newNotes) => {
+    localStorage.setItem('my-notes', JSON.stringify(newNotes));
+    setNotes(newNotes);
+  };
+
   const addNote = () => {
     if (noteText().trim() !== '') {
-      setNotes([...notes(), noteText()]);
+      const updatedNotes = [...notes(), noteText()];
+      saveNotes(updatedNotes);
       setNoteText('');
     }
   };
 
   const deleteNote = (indexToDelete) => {
-    setNotes(notes().filter((_, index) => index !== indexToDelete));
+    const updatedNotes = notes().filter((_, index) => index !== indexToDelete);
+    saveNotes(updatedNotes);
   };
 
   return (
@@ -50,7 +66,7 @@ function App() {
           >
             <span
             style={{
-              padding: '3px'
+              padding: '3px' 
             }}
             ><strong>{index + 1}.</strong> {note}</span>
             <button
