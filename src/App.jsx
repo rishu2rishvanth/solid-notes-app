@@ -77,6 +77,20 @@ function App() {
     }
   };
 
+  // Clear all notes with export prompt
+  const clearAllNotes = () => {
+    const confirmExport = window.confirm('Would you like to export your notes before clearing them?');
+    if (confirmExport) {
+      exportNotes();  // Export notes first
+    }
+
+    // Proceed with the confirmation to clear notes
+    const confirmClear = window.confirm('Are you sure you want to clear all notes? This action cannot be undone.');
+    if (confirmClear) {
+      saveNotes([]);  // Clear notes
+    }
+  };
+
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h1>📝 Notes App</h1>
@@ -85,7 +99,7 @@ function App() {
         <input
           type="text"
           value={noteText()}
-          onInput={(e) => setNoteText(e.target.value)}
+          onInput={(e) => setNoteText(e.target.value.trim())}
           onKeyDown={(e) => e.key === 'Enter' && addNote()}
           placeholder="Write a note..."
           style={{ padding: '0.5rem', width: '250px' }}
@@ -118,10 +132,11 @@ function App() {
               overflowWrap: 'break-word',
               whiteSpace: 'pre-wrap',
               hyphens: 'auto',
+              width: '100%',
             }}
             ><strong>{notes().length - index}.</strong> {note.text}</div>
             <small style={{ color: '#555' }}>🕒 {note.time}</small>
-                        <button
+            <button
               onClick={() => toggleCompletion(index)}  // Toggle completion on click
               style={{
                 background: note.completed ? 'gray' : 'green',
@@ -188,6 +203,22 @@ function App() {
           }}
         >
           📤 Import Notes
+        </button>
+
+        {/* Clear All Notes Button */}
+        <button
+          onClick={clearAllNotes}
+          style={{
+            background: 'red',
+            color: '#fff',
+            padding: '0.5rem 1rem',
+            margin: '0.5rem',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          🧹 Clear All Notes
         </button>
       </div>
     </div>
