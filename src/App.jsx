@@ -47,6 +47,36 @@ function App() {
     saveNotes(updatedNotes);
   };
 
+  // Export notes as JSON
+  const exportNotes = () => {
+    const notesBlob = new Blob([JSON.stringify(notes())], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(notesBlob);
+    link.download = 'my-notes.json';
+    link.click();
+  };
+
+  // Import notes from a JSON file
+  const importNotes = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const importedNotes = JSON.parse(reader.result);
+          if (Array.isArray(importedNotes)) {
+            saveNotes(importedNotes);  // Update notes with the imported ones
+          } else {
+            alert('Invalid notes file');
+          }
+        } catch (error) {
+          alert('Error reading file');
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   return (
     <div style={{ padding: '2rem', fontFamily: 'Arial' }}>
       <h1>📝 Notes App</h1>
@@ -90,6 +120,20 @@ function App() {
             }}
             ><strong>{notes().length - index}.</strong> {note.text}</div>
             <small style={{ color: '#555' }}>🕒 {note.time}</small>
+                        <button
+              onClick={() => toggleCompletion(index)}  // Toggle completion on click
+              style={{
+                background: note.completed ? 'gray' : 'green',
+                margin: '3px',
+                color: '#fff',
+                border: 'none',
+                padding: '0.3rem 0.5rem',
+                borderRadius: '3px',
+                cursor: 'pointer',
+              }}
+            >
+              {note.completed ? '✔️ Completed' : '❌ Mark as Done'}
+            </button>
             <button
               onClick={() => deleteNote(index)}  // Delete note on click
               style={{
@@ -104,23 +148,47 @@ function App() {
             >
               🗑️ Delete
             </button>
-            <button
-              onClick={() => toggleCompletion(index)}  // Toggle completion on click
-              style={{
-                background: note.completed ? 'gray' : 'green',
-                margin: '3px',
-                color: '#fff',
-                border: 'none',
-                padding: '0.3rem 0.5rem',
-                borderRadius: '3px',
-                cursor: 'pointer',
-              }}
-            >
-              {note.completed ? '✔️ Completed' : '❌ Mark as Done'}
-            </button>
           </li>
         ))}
       </ul>
+
+      <div style={{ marginTop: '1rem' }}>
+        <button
+          onClick={exportNotes}
+          style={{
+            background: 'blue',
+            color: '#fff',
+            padding: '0.5rem 1rem',
+            margin: '0.5rem',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          📥 Export Notes
+        </button>
+
+        <input
+          type="file"
+          accept=".json"
+          onChange={importNotes}
+          style={{ padding: '0.5rem', margin: '0.5rem' }}
+        />
+        <button
+          onClick={() => document.querySelector('input[type="file"]').click()}
+          style={{
+            background: 'orange',
+            color: '#fff',
+            padding: '0.5rem 1rem',
+            margin: '0.5rem',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          📤 Import Notes
+        </button>
+      </div>
     </div>
   );
 }
