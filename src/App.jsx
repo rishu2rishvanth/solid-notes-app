@@ -6,6 +6,26 @@ import './styles/App.css';
 function App() {
   const [notes, setNotes] = createSignal([]);
 
+
+  const [darkMode, setDarkMode] = createSignal(false);
+  
+  onMount(() => {
+    const stored = localStorage.getItem('dark-mode');
+    setDarkMode(stored === 'true');
+    updateBodyClass(stored === 'true');
+  });
+  
+  const toggleDarkMode = () => {
+    const newValue = !darkMode();
+    setDarkMode(newValue);
+    localStorage.setItem('dark-mode', newValue);
+    updateBodyClass(newValue);
+  };
+  
+  const updateBodyClass = (isDark) => {
+    document.body.classList.toggle('dark', isDark);
+  };
+
   // Load notes from localStorage when app starts
   onMount(() => {
     const saved = localStorage.getItem('my-notes');
@@ -85,6 +105,20 @@ function App() {
         <input type="file" accept=".json" onChange={importNotes} style={{ display: 'none' }} />
         <button onClick={() => document.querySelector('input[type="file"]').click()}>📤 Import Notes</button>
         <button onClick={clearAllNotes}>🧹 Clear All Notes</button>
+        <button
+          onClick={toggleDarkMode}
+          style={{
+            background: darkMode() ? '#333' : '#eee',
+            color: darkMode() ? '#fff' : '#000',
+            border: 'none',
+            padding: '0.5rem 1rem',
+            marginBottom: '1rem',
+            borderRadius: '5px',
+            cursor: 'pointer',
+          }}
+        >
+          {darkMode() ? '☀️ Light Mode' : '🌙 Dark Mode'}
+        </button>
       </div>
 
       {/* NoteInput Component */}
