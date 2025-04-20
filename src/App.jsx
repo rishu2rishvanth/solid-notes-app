@@ -24,6 +24,7 @@ function App() {
           type="text"
           value={noteText()}
           onInput={(e) => setNoteText(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && addNote()}
           placeholder="Write a note..."
           style={{ padding: '0.5rem', width: '300px' }}
         />
@@ -49,11 +50,9 @@ function App() {
           >
             <span
             style={{
-              padding: '3px',
+              padding: '3px'
             }}
-            >
-              {note}
-            </span>
+            ><strong>{index + 1}.</strong> {note}</span>
             <button
               onClick={() => deleteNote(index)}
               style={{
