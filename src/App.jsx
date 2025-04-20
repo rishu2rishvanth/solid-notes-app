@@ -48,7 +48,7 @@ function App() {
           placeholder="Write a note..."
           style={{ padding: '0.5rem', width: '300px' }}
         />
-        <button onClick={addNote} style={{ padding: '0.5rem', marginLeft: '0.5rem' }}>
+        <button onClick={addNote} style={{ padding: '0.5rem', margin: '3px' }}>
           Add Note
         </button>
       </div>
@@ -66,12 +66,15 @@ function App() {
               display: 'block',
               justifyContent: 'space-between',
               alignItems: 'center',
-              wordWrap: 'break-word',
-              overflowWrap: 'break-word',
-              whiteSpace: 'pre-wrap' // this helps with line breaks
             }}
           >
-            <div><strong>{index + 1}.</strong> {note.text}</div>
+            <div style={{
+              marginBottom: '0.5rem',
+              wordWrap: 'break-word',
+              overflowWrap: 'anywhere',
+              whiteSpace: 'pre-wrap',
+            }}
+            ><strong>{index + 1}.</strong> {note.text}</div>
             <small style={{ color: '#555' }}>🕒 {note.time}</small>
             <button
               onClick={() => deleteNote(index)}
