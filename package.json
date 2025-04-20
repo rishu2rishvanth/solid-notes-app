@@ -11,6 +11,7 @@
   },
   "homepage": "https://github.com/rishu2rishvanth/solid-notes-app",
   "dependencies": {
+    "solid-app-router": "^0.4.2",
     "solid-js": "^1.9.5"
   },
   "devDependencies": {

@@ -1,13 +1,11 @@
 /* @refresh reload */
-import { render } from 'solid-js/web'
-import { HashRouter } from 'solid-app-router';
-import './index.css'
-import App from './App.jsx'
-
-const root = document.getElementById('root')
+import { render } from 'solid-js/web';
+import { Router } from 'solid-app-router'; // Updated import
+import './index.css';
+import App from './App.jsx';
 
 render(() => (
-    <HashRouter>
-      <App />
-    </HashRouter>
-  ), root);
+  <Router>
+    <App />
+  </Router>
+), document.getElementById('root'));
